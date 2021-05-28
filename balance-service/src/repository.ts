@@ -1,30 +1,32 @@
 import { Repository as IRepository } from './interface'
 import mongoose, { Mongoose } from 'mongoose';
 const Schema = mongoose.Schema;
-import { ObjectID } from 'mongodb';
-
+import { ObjectId } from 'mongodb';
+import dotenv from "dotenv"
+dotenv.config()
 
 const BalanceSchema = new Schema({
-  // id: ObjectID,
   balance: Number,
   updatedAt: Date,
 });
 
-const DB_URL = "mongodb+srv://test_user:Bu7QipYYlgrQi2H8@cluster0.zk8pi.mongodb.net/main?retryWrites=true&w=majority";
+const DB_URL = process.env['DB_URL']?.toString() || 'url';
 
 export class Repository implements IRepository {
   dbUrl: string;
 
   constructor(dataSourceUrl = DB_URL) {
-    this.dbUrl = dataSourceUrl
 
+    this.dbUrl = dataSourceUrl
   }
 
   async has(userId: string) {
     try {
       this.mongooseInstance()
-      const response = this.model().findOne({ _id: new ObjectID(userId) })
-      if (response) return true
+      const response = await this.model().findById(new ObjectId(userId))
+      console.log({ response: response.response });
+
+      if (response.balance) return true
     } catch (_) { }
     return false;
   }
@@ -32,8 +34,8 @@ export class Repository implements IRepository {
   async get(userId: string) {
     try {
       this.mongooseInstance()
-      const record = await this.model().findOne({_id:userId});
-      if(record) return record.balance;
+      const record = await this.model().findOne({ _id: userId });
+      if (record) return record.balance;
       return 0
     } catch (_) {
     }
@@ -44,7 +46,7 @@ export class Repository implements IRepository {
     try {
       this.mongooseInstance()
       const model = this.model()
-      const options = {upsert:true}
+      const options = { upsert: true }
       const updateRecord = await model.updateOne({ _id: userId }, { balance: amount, updatedAt: new Date() }, options)
       if (updateRecord) return true
     } catch (error) {
