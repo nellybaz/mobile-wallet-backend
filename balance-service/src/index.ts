@@ -1,5 +1,14 @@
 import { User, Repository } from './interface/'
 
+/**
+ * TODOS
+ * Retry mechanisms when the credit and debit fails
+ * 
+ * Balance service is going to be used by a lot of services
+ * 1) We want to tell what service called it last in times of error in balances
+ *    => Keep track of each balance change snapshot and the service that changed it
+ * 
+ */
 export class BalanceService {
   repository;
   constructor(repository: Repository) {
