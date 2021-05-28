@@ -21,7 +21,7 @@ export class Repository implements IRepository {
     this.dbUrl = dataSourceUrl
   }
 
-  async has(userId: string) {
+  async hasRecord(userId: string) {
     try {
       this.mongooseInstance()
       const response = await this.model().findById(new ObjectId(userId));
@@ -31,7 +31,7 @@ export class Repository implements IRepository {
     return false;
   }
 
-  async get(userId: string) {
+  async getRecord(userId: string) {
     try {
       this.mongooseInstance()
       const record = await this.model().findOne({ _id: userId });
@@ -43,7 +43,7 @@ export class Repository implements IRepository {
     return 0;
   }
 
-  async put(userId: string, amount: number) {
+  async putRecord(userId: string, amount: number) {
     try {
       const connection = this.mongooseInstance()
       const model = this.model()
@@ -74,7 +74,6 @@ export class Repository implements IRepository {
     try {
       return mongoose.model('Balance', BalanceSchema);
     } catch (error) {
-      console.log('Error getting model');
       throw Error('Error getting model');
     }
   }

@@ -28,23 +28,23 @@ describe('Repository', ()=>{
   it('returns correct boolean for record in db', async ()=>{
     const repo = new Repository()
     // const response = await repo.mongooseInstance()
-    expect(await repo.has(userId)).to.eq(true)
-    expect(await repo.has('001')).to.eq(false)
+    expect(await repo.hasRecord(userId)).to.eq(true)
+    expect(await repo.hasRecord('001')).to.eq(false)
   })
 
 
   it('returns correct values when putting record to the db', async ()=>{
     const repo = new Repository()
     // const response = await repo.mongooseInstance()
-    expect(await repo.put('111', 1000)).to.eq(false)
-    expect(await repo.put(new ObjectId().toHexString(), 1000)).to.eq(true)
+    expect(await repo.putRecord('111', 1000)).to.eq(false)
+    expect(await repo.putRecord(new ObjectId().toHexString(), 1000)).to.eq(true)
   })
 
   it('returns correct balance for record ids', async ()=>{
     const repo = new Repository()
     // const response = await repo.mongooseInstance()
-    expect(await repo.get('111')).to.eq(0)
-    expect(await repo.get(new ObjectId().toHexString())).to.eq(0)
-    expect(await repo.get(userId)).to.eq(1000)
+    expect(await repo.getRecord('111')).to.eq(0)
+    expect(await repo.getRecord(new ObjectId().toHexString())).to.eq(0)
+    expect(await repo.getRecord(userId)).to.eq(1000)
   })
 })

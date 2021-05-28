@@ -1,5 +1,5 @@
 export interface Repository{
-  has:(userId:string)=>Promise<boolean>,
-  get:(userId:string) => Promise<number>,
-  put:(userId:string, amount:number)=>Promise<boolean>
+  hasRecord:(userId:string)=>Promise<boolean>,
+  getRecord:(userId:string) => Promise<number>,
+  putRecord:(userId:string, amount:number)=>Promise<boolean>
 }

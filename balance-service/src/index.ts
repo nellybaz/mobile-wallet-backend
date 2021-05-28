@@ -22,24 +22,24 @@ export class BalanceService {
   }
 
   async balance(user: User): Promise<number> {
-    if (await !this.repository.has(user.id)) {
+    if (await !this.repository.hasRecord(user.id)) {
       return 0;
     }
-    return this.repository.get(user.id);
+    return this.repository.getRecord(user.id);
   }
 
   async credit(user: User, amount: number): Promise<number> {
-    let currentAmount = await this.repository.get(user.id);
+    let currentAmount = await this.repository.getRecord(user.id);
     let newAmount = currentAmount + amount;
-    let creditRes = await this.repository.put(user.id, newAmount);
+    let creditRes = await this.repository.putRecord(user.id, newAmount);
     if (creditRes) return newAmount;
     throw Error('Error crediting balance')
   }
 
   async debit(user: User, amount: number): Promise<number> {
-    let currentAmount = await this.repository.get(user.id);
+    let currentAmount = await this.repository.getRecord(user.id);
     let newAmount = currentAmount - amount;
-    let creditRes = await this.repository.put(user.id, newAmount);
+    let creditRes = await this.repository.putRecord(user.id, newAmount);
     if (creditRes) return newAmount;
     throw Error('Error debiting balance')
   }

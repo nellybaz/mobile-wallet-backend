@@ -6,7 +6,7 @@ import { User, Repository } from '../interface'
 describe('Balance service', () => {
   let repo: Repository;
   beforeEach(() => {
-    repo = { get: () => Promise.resolve(0), has: () => Promise.resolve(true), put: () => Promise.resolve(false) };
+    repo = { getRecord: () => Promise.resolve(0), hasRecord: () => Promise.resolve(true), putRecord: () => Promise.resolve(false) };
   });
   describe('Balance', () => {
     it('returns 0 for user with no balance', async () => {
@@ -31,7 +31,7 @@ describe('Balance service', () => {
       let user: User = {
         id: '123'
       }
-      repo.get = () => Promise.resolve(100);
+      repo.getRecord = () => Promise.resolve(100);
       let balanceService = new BalanceService(repo);
 
       expect(await balanceService.balance(user)).to.eq(100);
@@ -44,8 +44,8 @@ describe('Balance service', () => {
       let user: User = {
         id: '123'
       }
-      repo.get = () => Promise.resolve(100);
-      repo.put = () => Promise.resolve(true);
+      repo.getRecord = () => Promise.resolve(100);
+      repo.putRecord = () => Promise.resolve(true);
       let balanceService = new BalanceService(repo);
 
       expect(await balanceService.balance(user)).to.eq(100);
@@ -56,8 +56,8 @@ describe('Balance service', () => {
       let user: User = {
         id: '123'
       }
-      repo.get = () => Promise.resolve(100);
-      repo.put = () => Promise.resolve(false);
+      repo.getRecord = () => Promise.resolve(100);
+      repo.putRecord = () => Promise.resolve(false);
       let balanceService = new BalanceService(repo);
 
       expect(await balanceService.balance(user)).to.eq(100);
@@ -76,8 +76,8 @@ describe('Balance service', () => {
       let user: User = {
         id: '123'
       }
-      repo.get = () => Promise.resolve(100);
-      repo.put = () => Promise.resolve(true);
+      repo.getRecord = () => Promise.resolve(100);
+      repo.putRecord = () => Promise.resolve(true);
       let balanceService = new BalanceService(repo);
 
       expect(await balanceService.balance(user)).to.eq(100);
@@ -88,8 +88,8 @@ describe('Balance service', () => {
       let user: User = {
         id: '123'
       }
-      repo.get = () => Promise.resolve(100);
-      repo.put = () => Promise.resolve(false);
+      repo.getRecord = () => Promise.resolve(100);
+      repo.putRecord = () => Promise.resolve(false);
       let balanceService = new BalanceService(repo);
 
       expect(await balanceService.balance(user)).to.eq(100);
