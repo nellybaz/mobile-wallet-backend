@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 import 'mocha'
-import { User, BalanceService, Repository } from '../index';
+import { BalanceService } from '../index';
+import { User, Repository } from '../interface'
 
 describe('Balance service', () => {
   let repo: Repository;
