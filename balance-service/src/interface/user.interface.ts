@@ -1,3 +1,4 @@
-export interface User{
-  id:string
+export interface BalanceRequestModel{
+  userId:string,
+  amount?:number
 }

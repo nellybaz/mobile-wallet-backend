@@ -1,4 +1,4 @@
-import { User, Repository } from './interface/'
+import { BalanceRequestModel, Repository } from './interface/'
 
 /**
  * TODOS
@@ -21,25 +21,25 @@ export class BalanceService {
     this.repository = repository;
   }
 
-  async balance(user: User): Promise<number> {
-    if (await !this.repository.hasRecord(user.id)) {
+  async balance(balanceRequest: BalanceRequestModel): Promise<number> {
+    if (await !this.repository.hasRecord(balanceRequest.userId)) {
       return 0;
     }
-    return this.repository.getRecord(user.id);
+    return this.repository.getRecord(balanceRequest.userId);
   }
 
-  async credit(user: User, amount: number): Promise<number> {
-    let currentAmount = await this.repository.getRecord(user.id);
-    let newAmount = currentAmount + amount;
-    let creditRes = await this.repository.putRecord(user.id, newAmount);
+  async credit(balanceRequest: BalanceRequestModel): Promise<number> {
+    let currentAmount = await this.repository.getRecord(balanceRequest.userId);
+    let newAmount = currentAmount + balanceRequest.amount!;
+    let creditRes = await this.repository.putRecord(balanceRequest.userId, newAmount);
     if (creditRes) return newAmount;
     throw Error('Error crediting balance')
   }
 
-  async debit(user: User, amount: number): Promise<number> {
-    let currentAmount = await this.repository.getRecord(user.id);
-    let newAmount = currentAmount - amount;
-    let creditRes = await this.repository.putRecord(user.id, newAmount);
+  async debit(balanceRequest: BalanceRequestModel): Promise<number> {
+    let currentAmount = await this.repository.getRecord(balanceRequest.userId);
+    let newAmount = currentAmount - balanceRequest.amount!;
+    let creditRes = await this.repository.putRecord(balanceRequest.userId, newAmount);
     if (creditRes) return newAmount;
     throw Error('Error debiting balance')
   }

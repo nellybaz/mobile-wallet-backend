@@ -2,7 +2,10 @@ import { expect } from 'chai';
 import 'mocha'
 import { Repository } from '../repository';
 import {ObjectId} from 'mongodb'
-const userId = '60b0c537913d7372b499a4ff'
+import dotenv from "dotenv"
+dotenv.config()
+
+const userId = process.env.EXISTING_SAMPLE_BALANCE_RECORD_ID || ''.toString()
 
 describe('Repository', ()=>{
   it('connects successfully to correct datasource url', async () =>{
@@ -27,7 +30,6 @@ describe('Repository', ()=>{
 
   it('returns correct boolean for record in db', async ()=>{
     const repo = new Repository()
-    // const response = await repo.mongooseInstance()
     expect(await repo.hasRecord(userId)).to.eq(true)
     expect(await repo.hasRecord('001')).to.eq(false)
   })
@@ -35,14 +37,12 @@ describe('Repository', ()=>{
 
   it('returns correct values when putting record to the db', async ()=>{
     const repo = new Repository()
-    // const response = await repo.mongooseInstance()
     expect(await repo.putRecord('111', 1000)).to.eq(false)
     expect(await repo.putRecord(new ObjectId().toHexString(), 1000)).to.eq(true)
   })
 
   it('returns correct balance for record ids', async ()=>{
     const repo = new Repository()
-    // const response = await repo.mongooseInstance()
     expect(await repo.getRecord('111')).to.eq(0)
     expect(await repo.getRecord(new ObjectId().toHexString())).to.eq(0)
     expect(await repo.getRecord(userId)).to.eq(1000)
