@@ -5,6 +5,7 @@ import { ObjectId } from 'mongodb';
 import dotenv from "dotenv"
 dotenv.config()
 
+
 const BalanceSchema = new Schema({
   balance: Number,
   updatedAt: Date,
@@ -23,9 +24,8 @@ export class Repository implements IRepository {
   async has(userId: string) {
     try {
       this.mongooseInstance()
-      const response = await this.model().findById(new ObjectId(userId))
-      console.log({ response: response.response });
-
+      const response = await this.model().findById(new ObjectId(userId));
+      await mongoose.connection.close()
       if (response.balance) return true
     } catch (_) { }
     return false;
@@ -35,6 +35,7 @@ export class Repository implements IRepository {
     try {
       this.mongooseInstance()
       const record = await this.model().findOne({ _id: userId });
+      await mongoose.connection.close()
       if (record) return record.balance;
       return 0
     } catch (_) {
@@ -44,10 +45,11 @@ export class Repository implements IRepository {
 
   async put(userId: string, amount: number) {
     try {
-      this.mongooseInstance()
+      const connection = this.mongooseInstance()
       const model = this.model()
       const options = { upsert: true }
       const updateRecord = await model.updateOne({ _id: userId }, { balance: amount, updatedAt: new Date() }, options)
+      await mongoose.connection.close()
       if (updateRecord) return true
     } catch (error) {
 
@@ -66,10 +68,6 @@ export class Repository implements IRepository {
     } catch (error) {
       throw Error('Error connecting to repository datasource');
     }
-  }
-
-  async close(mongooseInstance: any) {
-    await mongooseInstance.close();
   }
 
   model() {
